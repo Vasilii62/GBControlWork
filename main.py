@@ -1,62 +1,58 @@
-from Program.AnimalRegistry import AnimalRegistry
-from Program.Counter import Counter
-from Program.Db_config import Db_config
+import mysql.connector
+from AnimalRegistry import AnimalRegistry
+from Counter import Counter
+
 
 def main():
-    registry = AnimalRegistry()
-    counter = Counter()
+    # Создаем объект класса Counter
+    with Counter() as counter:
+        # Database configuration
+        db_config = {
+            "host": "localhost",
+            "user": "root",
+            "password": "",
+            "database": "human_friends"
+        }
 
-    try:
-        with AnimalRegistry(Db_config) as registry:
-            while True:
-                print("\n--- Animal Registry Menu ---")
-                print("1. Add a new animal")
-                print("2. Identify the class of an animal")
-                print("3. See the list of commands of an animal")
-                print("4. Train an animal with new commands")
-                print("5. Show all animals")
-                print("6. Exit")
+        # Создаем экземпляр класса AnimalRegistry
+        registry = AnimalRegistry(db_config)
 
-                choice = int(input("Enter your choice: "))
+        while True:
+            print("Animal Registry Menu:")
+            print("1. Add new animal")
+            print("2. Show list of animals")
+            print("3. Train animal with new commands")
+            print("4. Exit")
 
-                if choice == 1:
-                    name = input("Enter the name of the animal: ")
-                    birthday = input("Enter the birthday of the animal (YYYY-MM-DD): ")
-                    commands = input("Enter the commands of the animal (comma-separated): ")
-                    genus_name = input("Enter the genus name of the animal: ")
-                    class_name = input("Enter the class name of the animal: ")
-                    registry.add_animal(name, birthday, commands, genus_name, class_name)
-                    print(f"Animal {name} has been added to the registry.")
-                    print(f"Total animals registered: {counter.add()}")
+            choice = input("Enter your choice: ")
 
-                elif choice == 2:
-                    registry.show_animals()
-                    animal_idx = int(input("Enter the index of the animal: "))
-                    registry.identify_class(animal_idx)
+            if choice == "1":
+                name = input("Enter the animal's name: ")
+                birthday = input("Enter the animal's birthday (YYYY-MM-DD): ")
+                commands = input("Enter the animal's commands (comma-separated): ")
+                genus_name = input("Enter the animal's genus name: ")
+                class_name = input("Enter the animal's class name: ")
 
-                elif choice == 3:
-                    registry.show_animals()
-                    animal_idx = int(input("Enter the index of the animal: "))
-                    print(f"Commands of the animal: {registry.animals[animal_idx - 1]['Commands']}")
+                registry.add_animal(name, birthday, commands, genus_name, class_name)
+                # Увеличиваем счетчик при заведении нового животного
+                counter.add()
 
-                elif choice == 4:
-                    registry.show_animals()
-                    animal_idx = int(input("Enter the index of the animal: "))
-                    new_commands = input("Enter the new commands for the animal (comma-separated): ")
-                    registry.train_animal(animal_idx, new_commands)
+            elif choice == "2":
+                registry.show_animal_list()
 
-                elif choice == 5:
-                    registry.show_animals()
+            elif choice == "3":
+                animal_id = input("Enter the ID of the animal you want to train: ")
+                new_commands = input("Enter the new commands for the animal (comma-separated): ")
 
-                elif choice == 6:
-                    print("Exiting the Animal Registry.")
-                    break
+                registry.train_animal(animal_id, new_commands)
 
-                else:
-                    print("Invalid choice. Please try again.")
+            elif choice == "4":
+                print("Exiting the program.")
+                break
 
-    except:
-        print("An error occurred.")
+            else:
+                print("Invalid choice. Please try again.")
+
 
 if __name__ == "__main__":
     main()
