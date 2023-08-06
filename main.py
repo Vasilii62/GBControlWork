@@ -1,4 +1,3 @@
-import mysql.connector
 from AnimalRegistry import AnimalRegistry
 from Counter import Counter
 

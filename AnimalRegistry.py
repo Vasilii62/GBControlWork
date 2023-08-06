@@ -1,5 +1,6 @@
 import mysql.connector
 
+
 class AnimalRegistry:
     def __init__(self, db_config):
         self.db_config = db_config
@@ -100,7 +101,8 @@ class AnimalRegistry:
             print("List of Animals:")
             for animal in animals:
                 animal_id, name, birthday, commands, genus_name, class_name = animal
-                print(f"ID: {animal_id}, Name: {name}, Birthday: {birthday}, Commands: {commands}, Genus: {genus_name}, Class: {class_name}")
+                print(
+                    f"ID: {animal_id}, Name: {name}, Birthday: {birthday}, Commands: {commands}, Genus: {genus_name}, Class: {class_name}")
 
         except mysql.connector.Error as error:
             print(f"An error occurred: {error}")
@@ -109,12 +111,3 @@ class AnimalRegistry:
             if connection.is_connected():
                 cursor.close()
                 connection.close()
-
-
-  
-
-
-
-
-
-
